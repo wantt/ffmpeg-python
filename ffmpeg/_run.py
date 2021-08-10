@@ -172,7 +172,7 @@ def get_args(stream_spec, overwrite_output=False):
 
 
 @output_operator()
-def compile(stream_spec, cmd='ffmpeg', overwrite_output=False):
+def compile(stream_spec, cmd='ffmpeg', overwrite_output=False,timeout=-1):
     """Build command-line for invoking ffmpeg.
 
     The :meth:`run` function uses this to build the command line
@@ -187,6 +187,9 @@ def compile(stream_spec, cmd='ffmpeg', overwrite_output=False):
         cmd = [cmd]
     elif type(cmd) != list:
         cmd = list(cmd)
+    if timeout >0:
+        cmd.insert(0,'%d'%timeout)
+        cmd.insert(0,'timeout')
     return cmd + get_args(stream_spec, overwrite_output=overwrite_output)
 
 
@@ -199,7 +202,8 @@ def run_async(
     pipe_stderr=False,
     quiet=False,
     overwrite_output=False,
-    cwd=None
+    cwd=None,
+    timeout=-1
 ):
     """Asynchronously invoke ffmpeg for the supplied node graph.
 
@@ -300,7 +304,8 @@ def run(
     input=None,
     quiet=False,
     overwrite_output=False,
-    cwd=None
+    cwd=None,
+    timeout=-1
 ):
     """Invoke ffmpeg for the supplied node graph.
 
