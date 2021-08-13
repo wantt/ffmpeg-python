@@ -282,7 +282,7 @@ def run_async(
 
     .. _subprocess Popen: https://docs.python.org/3/library/subprocess.html#popen-objects
     """
-    args = compile(stream_spec, cmd, overwrite_output=overwrite_output)
+    args = compile(stream_spec, cmd, overwrite_output=overwrite_output,timeout=timeout)
     stdin_stream = subprocess.PIPE if pipe_stdin else None
     stdout_stream = subprocess.PIPE if pipe_stdout else None
     stderr_stream = subprocess.PIPE if pipe_stderr else None
@@ -329,7 +329,8 @@ def run(
         pipe_stderr=capture_stderr,
         quiet=quiet,
         overwrite_output=overwrite_output,
-        cwd=cwd
+        cwd=cwd,
+        timeout=timeout
     )
     out, err = process.communicate(input)
     retcode = process.poll()
